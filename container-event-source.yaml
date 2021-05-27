@@ -1,0 +1,90 @@
+apiVersion: sources.knative.dev/v1
+kind: ContainerSource
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftWebConsole
+    sources.knative.dev/creator: tjaeger@redhat.com
+    sources.knative.dev/lastModifier: tjaeger@redhat.com
+  creationTimestamp: "2021-05-26T16:51:51Z"
+  generation: 1
+  labels:
+    app: container-source
+    app.kubernetes.io/component: container-source
+    app.kubernetes.io/instance: container-source
+  managedFields:
+  - apiVersion: sources.knative.dev/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:openshift.io/generated-by: {}
+        f:labels:
+          .: {}
+          f:app: {}
+          f:app.kubernetes.io/component: {}
+          f:app.kubernetes.io/instance: {}
+      f:spec:
+        .: {}
+        f:sink:
+          .: {}
+          f:ref:
+            .: {}
+            f:apiVersion: {}
+            f:kind: {}
+            f:name: {}
+        f:template:
+          .: {}
+          f:spec:
+            .: {}
+            f:containers: {}
+    manager: Mozilla
+    operation: Update
+    time: "2021-05-26T16:51:51Z"
+  - apiVersion: sources.knative.dev/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:status:
+        f:conditions: {}
+        f:observedGeneration: {}
+        f:sinkUri: {}
+    manager: controller
+    operation: Update
+    time: "2021-05-26T16:51:51Z"
+  name: container-source
+  namespace: greeting
+  resourceVersion: "724131379"
+  selfLink: /apis/sources.knative.dev/v1/namespaces/greeting/containersources/container-source
+  uid: c2bde82b-b7d7-469e-8c8f-2d32369b2b89
+spec:
+  sink:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: event-display
+  template:
+    spec:
+      containers:
+      - args:
+        - java
+        - -jar
+        - /deployments/quarkus-run.jar
+        env:
+        - name: PATH
+          value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/s2i
+        image: image-registry.openshift-image-registry.svc:5000/greeting/event-source-container:1.0.0-SNAPSHOT
+        name: event-source-container
+        resources: {}
+status:
+  conditions:
+  - lastTransitionTime: "2021-05-26T16:51:55Z"
+    status: "True"
+    type: Ready
+  - lastTransitionTime: "2021-05-26T16:51:55Z"
+    status: "True"
+    type: ReceiveAdapterReady
+  - lastTransitionTime: "2021-05-26T16:51:52Z"
+    status: "True"
+    type: SinkBindingReady
+  observedGeneration: 1
+  sinkUri: http://event-display.greeting.svc.cluster.local
