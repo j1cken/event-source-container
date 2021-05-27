@@ -1,0 +1,9 @@
+oc -n greeting run kafka-producer \
+    -ti --image=quay.io/strimzi/kafka:latest-kafka-2.7.0 --rm=true \
+    --restart=Never -- bin/kafka-producer-perf-test.sh \
+  --num-records 50000 \
+  --record-size 100 \
+  --throughput -1 \
+  --producer-props acks=1 \
+  bootstrap.servers=my-cluster-kafka-bootstrap:9092 --topic my-topic
+

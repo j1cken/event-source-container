@@ -1,0 +1,149 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  annotations:
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"perf-event-source:latest","namespace":"greeting"},"fieldPath":"spec.template.spec.containers[?(@.name==\"perf-event-source\")].image","pause":"false"}]'
+    serving.knative.dev/creator: tjaeger@redhat.com
+    serving.knative.dev/lastModifier: tjaeger@redhat.com
+  creationTimestamp: "2021-05-27T14:32:51Z"
+  generation: 11
+  labels:
+    app.kubernetes.io/component: perf-event-source
+    app.kubernetes.io/instance: perf-event-source
+    app.kubernetes.io/name: perf-event-source
+    app.openshift.io/runtime: knative
+    app.openshift.io/runtime-namespace: greeting
+    app.openshift.io/runtime-version: latest
+  managedFields:
+  - apiVersion: serving.knative.dev/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:image.openshift.io/triggers: {}
+        f:labels:
+          .: {}
+          f:app.kubernetes.io/component: {}
+          f:app.kubernetes.io/instance: {}
+          f:app.kubernetes.io/name: {}
+          f:app.openshift.io/runtime: {}
+          f:app.openshift.io/runtime-namespace: {}
+          f:app.openshift.io/runtime-version: {}
+      f:spec:
+        .: {}
+        f:template:
+          .: {}
+          f:metadata:
+            .: {}
+            f:annotations:
+              .: {}
+              f:autoscaling.knative.dev/maxScale: {}
+              f:autoscaling.knative.dev/minScale: {}
+              f:image.openshift.io/triggers: {}
+            f:labels:
+              .: {}
+              f:app.kubernetes.io/component: {}
+              f:app.kubernetes.io/instance: {}
+              f:app.kubernetes.io/name: {}
+              f:app.openshift.io/runtime: {}
+              f:app.openshift.io/runtime-namespace: {}
+              f:app.openshift.io/runtime-version: {}
+          f:spec:
+            .: {}
+            f:containers: {}
+    manager: Mozilla
+    operation: Update
+    time: "2021-05-27T14:32:51Z"
+  - apiVersion: serving.knative.dev/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:status:
+        .: {}
+        f:address:
+          .: {}
+          f:url: {}
+        f:conditions: {}
+        f:latestCreatedRevisionName: {}
+        f:latestReadyRevisionName: {}
+        f:observedGeneration: {}
+        f:traffic: {}
+        f:url: {}
+    manager: controller
+    operation: Update
+    time: "2021-05-27T14:33:05Z"
+  - apiVersion: serving.knative.dev/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:template:
+          f:metadata:
+            f:annotations:
+              f:autoscaling.knative.dev/target: {}
+              f:autoscaling.knative.dev/targetUtilizationPercentage: {}
+          f:spec:
+            f:containerConcurrency: {}
+    manager: kubectl-edit
+    operation: Update
+    time: "2021-05-27T15:57:32Z"
+  name: perf-event-source
+  namespace: greeting
+  resourceVersion: "727418217"
+  selfLink: /apis/serving.knative.dev/v1/namespaces/greeting/services/perf-event-source
+  uid: c5e083a0-a340-40fa-9ff0-8f310013b6d8
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: "100"
+        autoscaling.knative.dev/minScale: "1"
+        autoscaling.knative.dev/target: "1"
+        autoscaling.knative.dev/targetUtilizationPercentage: "3"
+        image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"perf-event-source:latest","namespace":"greeting"},"fieldPath":"spec.template.spec.containers[?(@.name==\"perf-event-source\")].image","pause":"false"}]'
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/component: perf-event-source
+        app.kubernetes.io/instance: perf-event-source
+        app.kubernetes.io/name: perf-event-source
+        app.openshift.io/runtime: knative
+        app.openshift.io/runtime-namespace: greeting
+        app.openshift.io/runtime-version: latest
+    spec:
+      containerConcurrency: 1
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/greeting/perf-event-source:latest
+        imagePullPolicy: Always
+        name: perf-event-source
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          successThreshold: 1
+          tcpSocket:
+            port: 0
+        resources: {}
+      enableServiceLinks: false
+      timeoutSeconds: 300
+  traffic:
+  - latestRevision: true
+    percent: 100
+status:
+  address:
+    url: http://perf-event-source.greeting.svc.cluster.local
+  conditions:
+  - lastTransitionTime: "2021-05-27T16:09:51Z"
+    status: "True"
+    type: ConfigurationsReady
+  - lastTransitionTime: "2021-05-27T16:09:52Z"
+    status: "True"
+    type: Ready
+  - lastTransitionTime: "2021-05-27T16:09:52Z"
+    status: "True"
+    type: RoutesReady
+  latestCreatedRevisionName: perf-event-source-00011
+  latestReadyRevisionName: perf-event-source-00011
+  observedGeneration: 11
+  traffic:
+  - latestRevision: true
+    percent: 100
+    revisionName: perf-event-source-00011
+  url: http://perf-event-source-greeting.apps.cligg.me
