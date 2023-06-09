@@ -1,0 +1,55 @@
+source ~/bin/functions
+
+if [ $# -eq 1 ]; then
+  kn service delete cli-event-display
+  kn source kafka delete cli-kafka-source
+fi
+
+kn service create cli-event-display \
+    --image quay.io/openshift-knative/knative-eventing-sources-event-display \
+    --concurrency-limit 1 \
+    --scale-min 0 \
+    --scale-max 20
+
+kn source kafka create cli-kafka-source \
+    --servers my-cluster-kafka-bootstrap.${PRJ}:9092 \
+    --topics my-topic \
+    --consumergroup my-consumer-group \
+    --sink ksvc:cli-event-display
+
+#    --sink ksvc:cli-event-display \
+#    --annotation autoscaling.knative.dev/class=keda.autoscaling.knative.dev \
+#    --annotation autoscaling.knative.dev/minScale=0 \
+#    --annotation autoscaling.knative.dev/maxScale=10 \
+#    --annotation keda.autoscaling.knative.dev/pollingInterval=10 \
+#    --annotation keda.autoscaling.knative.dev/cooldownPeriod=10 \
+#    --annotation keda.autoscaling.knative.dev/kafkaLagThreshold=10
+
+echo 'apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  labels:
+    scaledobject.keda.sh/name: example
+  name: event-source-scaler
+  namespace: quarkus-demo
+spec:
+  cooldownPeriod: 30
+  maxReplicaCount: 10
+  minReplicaCount: 0
+  pollingInterval: 5
+  scaleTargetRef:
+    apiVersion: sources.knative.dev/v1beta1
+    kind: KafkaSource
+    name: cli-kafka-source
+  triggers:
+  - metadata:
+      allowIdleConsumers: "true"
+      bootstrapServers: my-cluster-kafka-bootstrap.quarkus-demo.svc:9092
+      consumerGroup: my-group
+      excludePersistentLag: "false"
+      lagThreshold: "5"
+      offsetResetPolicy: latest
+      scaleToZeroOnInvalidOffset: "false"
+      topic: my-topic
+      version: 1.0.0
+    type: kafka' | oc apply -f -
